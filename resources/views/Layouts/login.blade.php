@@ -24,7 +24,7 @@
     <div class="card-body login-card-body">
       <p class="login-box-msg">Sign in to start your session</p>
 
-      <form action="{{ asset('AdminLTE-master') }}/index3.html" method="post">
+      <form action="{{url('login')}}" method="post">
         <div class="input-group mb-3">
           <input type="text" class="form-control" placeholder="username">
           <div class="input-group-append">
@@ -60,6 +60,39 @@
 </div>
 <!-- /.login-box -->
 
+<script>
+<script>
+    $(function() {
+
+      $(document).on("submit", "#handleAjax", function() {
+        var e = this;
+        // change login button text before ajax
+        $(this).find("[type='submit']").html("LOGIN...");
+
+        $.post($(this).attr('action'), $(this).serialize(), function(data) {
+
+            console.log("data: " + data);
+
+          $(e).find("[type='submit']").html("LOGIN");
+          if (data.ERRORCODE) { // If success then redirect to login url
+            window.location = data.redirect_location;
+          }
+        }).fail(function(response) {
+            // handle error and show in html
+          $(e).find("[type='submit']").html("LOGIN");
+          $(".alert").remove();
+          var erroJson = JSON.parse(response.responseText);
+          for (var err in erroJson) {
+            for (var errstr of erroJson[err])
+              $("#errors-list").append("<div class='alert alert-danger'>" + errstr + "</div>");
+          }
+
+        });
+        return false;
+      });
+    });
+  </script>
+</script>
 <!-- jQuery -->
 <script src="{{ asset('AdminLTE-master') }}/plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->

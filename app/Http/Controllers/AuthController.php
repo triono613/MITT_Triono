@@ -16,6 +16,18 @@ use Tymon\JWTAuth\Contracts\JWTSubject as JWTSubject;
 
 class AuthController extends Controller
 {
+
+    function loginView()
+    {
+        return view("login");
+    }
+
+    function registerView()
+    {
+        return view("register");
+    }
+
+
   public function register( Request  $request) {
 
     $data = $request->all();
@@ -41,9 +53,6 @@ class AuthController extends Controller
 
                 ]);
 
-//echo "<pre>";
-            // dd($request);
-            // die;
 
             RETURN RESPONSE()->JSON([
                 //'user_id'=> $request->user()->password,
@@ -78,17 +87,14 @@ class AuthController extends Controller
 
 
             try {
-                // attempt to verify the credentials and create a token for the user
+
                 if ( !$token ) {
                     return response()->json(['error' => 'invalid_credentials'], 401);
                 }
             } catch (JWTException $e) {
-                // something went wrong whilst attempting to encode the token
+
                 return response()->json(['error' => 'could_not_create_token'], 500);
             }
-
-
-            // all good so return the token
 
             // dd( $request->user() );
 

@@ -8,7 +8,7 @@ Route::group(['middleware' => ['api']], function(){
 
 
     Route::group(['middleware' => ['jwt.auth']], function () {
-
+        Route::get('users/logout','AuthController@logout' );
 
 
 
