@@ -36,12 +36,14 @@ class AuthController extends Controller
                     'address' => $data['address'],
                     'birthdate' => $data['birthdate'],
                     'email' => $data['email'],
-                    'password' => "password2022"
+                    //'password' => "password2022"
+                   'password' => bcrypt( 'password2022' )
+
                 ]);
 
-// //echo "<pre>";
-//             dd($request);
-//             die;
+//echo "<pre>";
+            // dd($request);
+            // die;
 
             RETURN RESPONSE()->JSON([
                 //'user_id'=> $request->user()->password,
@@ -56,17 +58,16 @@ class AuthController extends Controller
   }
 
 
-        public function signin( Request $request ){
+        public function login( Request $request ){
 
             $this->validate( $request, [
-                'username' =>  'required'
+
+                'username' =>  'required',
+                'password' => 'required'
+
             ]);
 
-            $credentials = $request->only('username');
-
-            // echo "<pre>";
-            // print_r( $credentials );
-            // die;
+            $credentials = $request->only('username', 'password');
 
             $token = JWTAuth::attempt($credentials);
 
@@ -86,14 +87,19 @@ class AuthController extends Controller
                 return response()->json(['error' => 'could_not_create_token'], 500);
             }
 
+
             // all good so return the token
 
             // dd( $request->user() );
 
                 RETURN RESPONSE()->JSON([
-                    'user_id'=> $request->user()->id,
-                    'token'=> $token,
+                    // 'user_id'=> $request->user()->id,
+                    'username'=> $request->user()->username,
+                    'tokenType'=> 'jwt',
+                    'token'=> $token
                 ]);
+
+
 
 
 
