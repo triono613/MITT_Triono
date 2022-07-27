@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class dashboard extends Controller
+class dashboardController extends Controller
 {
-    function dashboard()
+
+    public function index()
     {
         return view('Layouts/master');
     }

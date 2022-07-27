@@ -27,6 +27,11 @@ class AuthController extends Controller
         return view("register");
     }
 
+    public function dashboardView()
+    {
+        return redirect()->action('dashboardController@index');
+    }
+
 
   public function register( Request  $request) {
 
@@ -80,10 +85,6 @@ class AuthController extends Controller
 
             $token = JWTAuth::attempt($credentials);
 
-            // echo "token= ";
-            // var_dump( $token );
-            // die;
-
             try {
 
                 if ( !$token ) {
@@ -96,9 +97,9 @@ class AuthController extends Controller
                         'tokenType'=> 'jwt',
                         'token'=> $token
                     ]);
-                    // return redirect("dashboard")->with( 'data', $data );
-
-                    return redirect()->route('route.dashboard', [$data]);
+                    // return redirect("dashboardView")->with( 'data', $data );
+                    return redirect()->action('dashboardController@index');
+;
                 }
             } catch (JWTException $e) {
 
