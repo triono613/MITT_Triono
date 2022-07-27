@@ -11,7 +11,19 @@
 |
 */
 
-Route::get('/', function () {
-    //return view('welcome');
-    return view('Layouts/login');
-});
+// Route::get('/', function () {
+//     //return view('welcome');
+//     return view('Layouts/login');
+// });
+
+
+use App\Http\Controllers\AuthController;
+use Illuminate\Support\Facades\Route;
+
+Route::get('/','AuthController@loginView' );
+Route::get('/register','AuthController@registerView' );;
+Route::post('usersProfile/register','AuthController@register' );
+Route::get('/dashboard',"AuthController@@dashboard");
+Route::get('/logout', "AuthController@logout");
+
+Route::post('users/login','AuthController@login' );

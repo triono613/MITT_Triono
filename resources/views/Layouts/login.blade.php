@@ -24,16 +24,16 @@
     <div class="card-body login-card-body">
       <p class="login-box-msg">Sign in to start your session</p>
 
-      <form action="{{url('login')}}" method="post">
+      <form action="{{url('api/users/login')}}" method="post" id="login-form">
         <div class="input-group mb-3">
-          <input type="text" class="form-control" placeholder="username">
+          <input type="text" class="form-control" id="username" name="username" placeholder="username">
           <div class="input-group-append">
             <div class="input-group-text">
             </div>
           </div>
         </div>
         <div class="input-group mb-3">
-          <input type="password" class="form-control" placeholder="Password">
+          <input id="password" name="password" type="password" class="form-control" placeholder="Password">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-lock"></span>
@@ -44,7 +44,7 @@
 
           <!-- /.col -->
           <div class="col-4">
-            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+            <button type="submit" id="submit"  class="btn btn-primary btn-block">Sign In</button>
           </div>
           <!-- /.col -->
         </div>
@@ -60,44 +60,46 @@
 </div>
 <!-- /.login-box -->
 
-<script>
-<script>
-    $(function() {
 
-      $(document).on("submit", "#handleAjax", function() {
-        var e = this;
-        // change login button text before ajax
-        $(this).find("[type='submit']").html("LOGIN...");
 
-        $.post($(this).attr('action'), $(this).serialize(), function(data) {
-
-            console.log("data: " + data);
-
-          $(e).find("[type='submit']").html("LOGIN");
-          if (data.ERRORCODE) { // If success then redirect to login url
-            window.location = data.redirect_location;
-          }
-        }).fail(function(response) {
-            // handle error and show in html
-          $(e).find("[type='submit']").html("LOGIN");
-          $(".alert").remove();
-          var erroJson = JSON.parse(response.responseText);
-          for (var err in erroJson) {
-            for (var errstr of erroJson[err])
-              $("#errors-list").append("<div class='alert alert-danger'>" + errstr + "</div>");
-          }
-
-        });
-        return false;
-      });
-    });
-  </script>
-</script>
 <!-- jQuery -->
 <script src="{{ asset('AdminLTE-master') }}/plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
 <script src="{{ asset('AdminLTE-master') }}/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
 <script src="{{ asset('AdminLTE-master') }}/dist/js/adminlte.min.js"></script>
+
+<script>
+    $("#login-form").submit(function(e){
+     e.preventDefault();
+alert("Please");
+    var all = $(this).serialize();
+    console.log('all: ',all);
+
+    $.ajax({
+        url:  $(this).attr('action'),
+        type: "POST",
+        data: all,
+        beforeSend:function(){
+            $(document).find('span.error-text').text('');
+        },
+        //validate form with ajax. This will be communicating
+          with your LoginController
+        success: function(data){
+            console.log('data= ',data);
+            if (data.status==0) {
+                $.each(data.error, function(prefix, val){
+
+                });
+            }
+
+          }
+        })
+
+    });
+
+
+</script>
+    </script>
 </body>
 </html>

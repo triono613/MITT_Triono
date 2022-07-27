@@ -17,12 +17,12 @@ use Tymon\JWTAuth\Contracts\JWTSubject as JWTSubject;
 class AuthController extends Controller
 {
 
-    function loginView()
+    public function loginView()
     {
-        return view("login");
+        return view('Layouts/login');
     }
 
-    function registerView()
+    public function registerView()
     {
         return view("register");
     }
@@ -69,11 +69,11 @@ class AuthController extends Controller
 
         public function login( Request $request ){
 
-            $this->validate( $request, [
+            // dd($request->all());
 
+            $this->validate( $request, [
                 'username' =>  'required',
                 'password' => 'required'
-
             ]);
 
             $credentials = $request->only('username', 'password');
@@ -84,12 +84,21 @@ class AuthController extends Controller
             // var_dump( $token );
             // die;
 
-
-
             try {
 
                 if ( !$token ) {
                     return response()->json(['error' => 'invalid_credentials'], 401);
+                } else {
+                    $data = response()->json([
+                        "status"=>true,
+                        "redirect_location"=>url("dashboard"),
+                        'username'=> $request->user()->username,
+                        'tokenType'=> 'jwt',
+                        'token'=> $token
+                    ]);
+                    // return redirect("dashboard")->with( 'data', $data );
+
+                    return redirect()->route('route.dashboard', [$data]);
                 }
             } catch (JWTException $e) {
 
@@ -98,16 +107,12 @@ class AuthController extends Controller
 
             // dd( $request->user() );
 
-                RETURN RESPONSE()->JSON([
-                    // 'user_id'=> $request->user()->id,
-                    'username'=> $request->user()->username,
-                    'tokenType'=> 'jwt',
-                    'token'=> $token
-                ]);
-
-
-
-
+                // RETURN RESPONSE()->JSON([
+                //     // 'user_id'=> $request->user()->id,
+                //     'username'=> $request->user()->username,
+                //     'tokenType'=> 'jwt',
+                //     'token'=> $token
+                // ]);
 
             // return response()->json(compact('token'));
 
